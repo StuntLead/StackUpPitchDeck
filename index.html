@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StackUp - Pitch Deck 2025</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome & Google Fonts -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Inter", "sans-serif"] },
+            colors: {
+              brand: {
+                green: "#10B981", // Emerald 500
+                dark: "#111827", // Gray 900
+                accent: "#34D399", // Emerald 400
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        overflow: hidden;
+        background-color: #111827;
+        color: white;
+      }
+
+      /* Slide Container */
+      .slide {
+        display: none;
+        height: 100vh;
+        width: 100vw;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow-y: auto; /* Allow scroll if content is too long on small screens */
+      }
+
+      .slide.active {
+        display: flex;
+        opacity: 1;
+        z-index: 10;
+      }
+
+      /* Glassmorphism Effect */
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* Animations */
+      .fade-up {
+        animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .delay-100 {
+        animation-delay: 0.1s;
+      }
+      .delay-200 {
+        animation-delay: 0.2s;
+      }
+      .delay-300 {
+        animation-delay: 0.3s;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1f2937;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #374151;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #4b5563;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <!-- Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1.5 z-50 bg-gray-800">
+      <div
+        id="progressBar"
+        class="h-full bg-brand-green transition-all duration-500 ease-out"
+        style="width: 0%"
+      ></div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="fixed bottom-8 right-8 z-50 flex gap-4">
+      <button
+        onclick="prevSlide()"
+        class="p-4 rounded-full glass-panel hover:bg-white/10 transition hover:scale-105 active:scale-95 text-brand-accent"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button
+        onclick="nextSlide()"
+        class="p-4 rounded-full glass-panel hover:bg-white/10 transition hover:scale-105 active:scale-95 text-brand-accent"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- Slide Counter -->
+    <div
+      class="fixed bottom-8 left-8 z-50 text-gray-500 font-mono text-sm tracking-widest"
+    >
+      SLIDE <span id="currentSlideNum" class="text-white font-bold">01</span> /
+      <span id="totalSlideNum">11</span>
+    </div>
+
+    <!-- ================= SLIDES START ================= -->
+
+    <!-- SLIDE 1: COVER -->
+    <div class="slide active flex-col justify-center items-center relative">
+      <div class="absolute inset-0 z-0">
+        <!-- Background Image Placeholder -->
+        <img
+          src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=1920"
+          class="w-full h-full object-cover opacity-20"
+          alt="Sandwich Background"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/80 to-transparent"
+        ></div>
+      </div>
+
+      <div class="relative z-10 text-center px-4">
+        <div
+          class="inline-block px-4 py-1 mb-6 border border-brand-green/50 rounded-full text-brand-accent text-sm tracking-[0.3em] uppercase fade-up"
+        >
+          Market Validation Pitch
+        </div>
+        <h1
+          class="text-7xl md:text-9xl font-black mb-2 tracking-tighter fade-up delay-100"
+        >
+          STACK<span class="text-brand-green">UP</span>
+        </h1>
+        <p
+          class="text-2xl md:text-4xl font-light text-gray-300 mb-12 italic fade-up delay-200"
+        >
+          "Rasa Juara, Racik Suka-Suka."
+        </p>
+        <div class="flex justify-center gap-4 fade-up delay-300">
+          <div class="text-left border-l-2 border-brand-green pl-4">
+            <p class="text-xs text-gray-500 uppercase tracking-wider">
+              Presenting Team
+            </p>
+            <p class="font-bold text-white">Stack Up</p>
+          </div>
+          <div class="text-left border-l-2 border-gray-700 pl-4">
+            <p class="text-xs text-gray-500 uppercase tracking-wider">Date</p>
+            <p class="font-bold text-white">November 2025</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: COMPANY PURPOSE -->
+    <div class="slide flex-col justify-center px-8 md:px-24">
+      <div class="max-w-7xl w-full mx-auto">
+        <h2
+          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-2 fade-up"
+        >
+          01. Company Purpose
+        </h2>
+        <h3
+          class="text-4xl md:text-6xl font-bold mb-12 leading-tight fade-up delay-100"
+        >
+          Redefining Local Flavors for the
+          <span class="text-brand-green">Urban Generation</span>.
+        </h3>
+
+        <div class="grid md:grid-cols-2 gap-12 items-center fade-up delay-200">
+          <div
+            class="glass-panel p-10 rounded-2xl border-l-8 border-brand-green"
+          >
+            <i class="fas fa-quote-left text-4xl text-brand-green/50 mb-6"></i>
+            <p class="text-2xl font-light leading-relaxed text-gray-200">
+              We exist to prove that
+              <b>authentic Indonesian heritage</b> (Rendang, Geprek) can be
+              transformed into a modern, customizable, and practical format that
+              fits the fast-paced lifestyle of today's youth.
+            </p>
+          </div>
+          <div class="space-y-6">
+            <div class="flex items-start">
+              <div
+                class="w-12 h-12 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green mr-4 shrink-0"
+              >
+                <i class="fas fa-layer-group"></i>
+              </div>
+              <div>
+                <h4 class="text-xl font-bold">Modern Format</h4>
+                <p class="text-gray-400">
+                  Sandwich format for grab-and-go convenience.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div
+                class="w-12 h-12 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green mr-4 shrink-0"
+              >
+                <i class="fas fa-sliders-h"></i>
+              </div>
+              <div>
+                <h4 class="text-xl font-bold">Full Customization</h4>
+                <p class="text-gray-400">
+                  Empowering customers to build their own stack.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div
+                class="w-12 h-12 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green mr-4 shrink-0"
+              >
+                <i class="fas fa-pepper-hot"></i>
+              </div>
+              <div>
+                <h4 class="text-xl font-bold">Authentic Taste</h4>
+                <p class="text-gray-400">
+                  No compromise on the richness of local spices.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: PROBLEM -->
+    <div
+      class="slide flex-col justify-center px-8 md:px-24 bg-gradient-to-br from-brand-dark to-gray-900"
+    >
+      <div class="max-w-7xl w-full mx-auto">
+        <h2
+          class="text-red-500 text-sm font-bold tracking-[0.2em] uppercase mb-12 fade-up"
+        >
+          02. The Pain Points
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-8 fade-up delay-100">
+          <!-- Problem 1 -->
+          <div
+            class="glass-panel p-8 rounded-2xl hover:border-red-500/50 transition group"
+          >
+            <div
+              class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition"
+            >
+              <i class="fas fa-utensils text-2xl text-red-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-3">"Lunch Boredom"</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">
+              Mahasiswa & pekerja muda terjebak dalam siklus menu yang monoton:
+              Ayam Goreng, Mi Instan, atau Warteg setiap hari.
+              <br /><span class="text-red-400 text-xs mt-2 block"
+                >*Validasi: 80% Responden kami merasakan ini.</span
+              >
+            </p>
+          </div>
+
+          <!-- Problem 2 -->
+          <div
+            class="glass-panel p-8 rounded-2xl hover:border-red-500/50 transition group"
+          >
+            <div
+              class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition"
+            >
+              <i class="fas fa-tachometer-alt text-2xl text-red-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-3">Lack of Agility</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">
+              Makanan tradisional (Nasi Padang/Geprek) enak, tapi "berat", bikin
+              ngantuk, dan ribet dimakan saat jam istirahat yang sempit atau
+              sambil mobile.
+            </p>
+          </div>
+
+          <!-- Problem 3 -->
+          <div
+            class="glass-panel p-8 rounded-2xl hover:border-red-500/50 transition group"
+          >
+            <div
+              class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition"
+            >
+              <i class="fas fa-wallet text-2xl text-red-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-3">Price vs Quality Gap</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">
+              Pilihan sandwich yang ada saat ini (Global Chains) terlalu mahal
+              (>50k), sedangkan opsi roti lokal seringkali hanya dianggap
+              "camilan" (toast).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: SOLUTION -->
+    <div class="slide flex-col justify-center px-8 md:px-24">
+      <div class="max-w-7xl w-full mx-auto">
+        <h2
+          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+        >
+          03. The Solution
+        </h2>
+
+        <div class="flex flex-col md:flex-row gap-12 items-center">
+          <div class="md:w-1/2 fade-up delay-100">
+            <h3 class="text-5xl md:text-6xl font-bold mb-6">
+              The <span class="text-brand-green">StackUp</span> Experience
+            </h3>
+            <p class="text-xl text-gray-300 mb-8">
+              Platform kuliner pertama yang menggabungkan
+              <span class="font-bold text-white">Cita Rasa Lokal</span> dengan
+              konsep
+              <span class="font-bold text-white">"Build-Your-Own-Sub"</span>.
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
+                <i class="fas fa-check-circle text-brand-green"></i> Authentic
+                Recipes
+              </div>
+              <div class="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
+                <i class="fas fa-check-circle text-brand-green"></i> Fresh Daily
+              </div>
+              <div class="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
+                <i class="fas fa-check-circle text-brand-green"></i> 100%
+                Customizable
+              </div>
+              <div class="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
+                <i class="fas fa-check-circle text-brand-green"></i> Affordable
+                Premium
+              </div>
+            </div>
+          </div>
+
+          <div class="md:w-1/2 w-full fade-up delay-200">
+            <!-- Visual Representation of Stacking -->
+            <div class="relative">
+              <div
+                class="absolute -inset-1 bg-gradient-to-r from-brand-green to-blue-600 rounded-2xl blur opacity-30"
+              ></div>
+              <div
+                class="relative bg-gray-900 p-8 rounded-2xl border border-gray-700"
+              >
+                <h4
+                  class="text-center font-bold mb-6 text-gray-400 tracking-widest"
+                >
+                  HOW IT WORKS
+                </h4>
+                <div class="space-y-3">
+                  <div
+                    class="p-4 bg-gray-800 rounded-lg border-l-4 border-yellow-500 flex justify-between items-center"
+                  >
+                    <span
+                      ><i class="fas fa-bread-slice mr-2 text-yellow-500"></i>
+                      1. Pilih Base</span
+                    >
+                    <span class="text-xs text-gray-500">Baguette / Wheat</span>
+                  </div>
+                  <div
+                    class="p-4 bg-gray-800 rounded-lg border-l-4 border-red-500 flex justify-between items-center"
+                  >
+                    <span
+                      ><i class="fas fa-drumstick-bite mr-2 text-red-500"></i>
+                      2. Pilih Protein</span
+                    >
+                    <span class="text-xs text-gray-500">Rendang / Geprek</span>
+                  </div>
+                  <div
+                    class="p-4 bg-gray-800 rounded-lg border-l-4 border-green-500 flex justify-between items-center"
+                  >
+                    <span
+                      ><i class="fas fa-leaf mr-2 text-green-500"></i> 3. Pilih
+                      Sayur</span
+                    >
+                    <span class="text-xs text-gray-500"
+                      >Selada / Tomat / Timun</span
+                    >
+                  </div>
+                  <div
+                    class="p-4 bg-gray-800 rounded-lg border-l-4 border-orange-500 flex justify-between items-center"
+                  >
+                    <span
+                      ><i class="fas fa-fill-drip mr-2 text-orange-500"></i> 4.
+                      Pilih Saus</span
+                    >
+                    <span class="text-xs text-gray-500"
+                      >Matah / Ijo / Bawang</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: WHY NOW (Market Validation) -->
+    <div class="slide flex-col justify-center px-8 md:px-24">
+      <div class="max-w-7xl w-full mx-auto">
+        <h2
+          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+        >
+          04. Market Validation (Why Now?)
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 fade-up delay-100">
+          <!-- Data Insight 1 -->
+          <div class="glass-panel p-6 rounded-2xl">
+            <h3 class="text-lg font-bold mb-4 flex items-center">
+              <i class="fas fa-chart-pie mr-3 text-brand-green"></i> Validasi
+              Masalah
+            </h3>
+            <div class="h-48 relative">
+              <canvas id="chartProblem"></canvas>
+            </div>
+            <p class="text-center text-sm text-gray-400 mt-4">
+              Mayoritas responden merasa bosan dengan opsi makan siang saat ini.
+            </p>
+          </div>
+
+          <!-- Data Insight 2 -->
+          <div class="glass-panel p-6 rounded-2xl">
+            <h3 class="text-lg font-bold mb-4 flex items-center">
+              <i class="fas fa-tags mr-3 text-brand-green"></i> Validasi Harga
+            </h3>
+            <div class="h-48 relative">
+              <canvas id="chartPrice"></canvas>
+            </div>
+            <p class="text-center text-sm text-gray-400 mt-4">
+              Harga Rp 30.000 diterima sebagai "Value for Money".
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 glass-panel p-6 rounded-xl fade-up delay-200">
+          <div class="flex items-center gap-4">
+            <div
+              class="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center text-3xl"
+            >
+              🎓
+            </div>
+            <div>
+              <h4 class="text-xl font-bold text-white">
+                Persona: "Rina" (Gen Z Student)
+              </h4>
+              <p class="text-gray-400 italic">
+                "Mahasiswi, jadwal padat, butuh makan cepat, suka mencoba hal
+                baru yang 'Instagrammable', dan sensitif harga"
+              </p>
+            </div>
+            <div class="ml-auto hidden md:block">
+              <span
+                class="px-4 py-2 bg-green-500/20 text-brand-green rounded-full text-sm font-bold"
+                >MATCHED</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: MARKET SIZE -->
+    <div class="slide flex-col justify-center px-8 md:px-24">
+      <div class="max-w-7xl w-full mx-auto text-center">
+        <h2
+          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-12 fade-up"
+        >
+          05. Market Opportunity
+        </h2>
+
+        <div
+          class="flex flex-col md:flex-row items-end justify-center gap-6 h-96 fade-up delay-100"
+        >
+          <!-- TAM -->
+          <div
+            class="w-full md:w-1/3 h-full bg-gray-800 rounded-t-2xl p-6 flex flex-col justify-between border-t-4 border-gray-600 relative overflow-hidden group"
+          >
+            <div
+              class="absolute inset-0 bg-gradient-to-b from-gray-700/20 to-transparent opacity-0 group-hover:opacity-100 transition"
+            ></div>
+            <div class="relative z-10">
+              <h3 class="text-gray-400 font-bold tracking-widest text-sm">
+                TAM
+              </h3>
+              <p class="text-xs text-gray-500">
+                Total Available Market (Indonesia)
+              </p>
+            </div>
+            <div class="relative z-10">
+              <span class="text-5xl font-black text-white">75.7 M</span>
+              <p class="text-xs text-gray-400 mt-2">
+                Populasi Usia 18-35 Tahun (BPS 2025)
+              </p>
+            </div>
+          </div>
+
+          <!-- SAM -->
+          <div
+            class="w-full md:w-1/3 h-[75%] bg-gray-800 rounded-t-2xl p-6 flex flex-col justify-between border-t-4 border-brand-accent relative overflow-hidden group"
+          >
+            <div
+              class="absolute inset-0 bg-gradient-to-b from-brand-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition"
+            ></div>
+            <div class="relative z-10">
+              <h3 class="text-brand-accent font-bold tracking-widest text-sm">
+                SAM
+              </h3>
+              <p class="text-xs text-gray-500">
+                Serviceable Available Market (Jakarta)
+              </p>
+            </div>
+            <div class="relative z-10">
+              <span class="text-5xl font-black text-white">2.76 M</span>
+              <p class="text-xs text-gray-400 mt-2">
+                Target Demografi di DKI Jakarta
+              </p>
+            </div>
+          </div>
+
+          <!-- SOM -->
+          <div
+            class="w-full md:w-1/3 h-[45%] bg-brand-green rounded-t-2xl p-6 flex flex-col justify-between shadow-[0_0_30px_rgba(16,185,129,0.4)] relative overflow-hidden group"
+          >
+            <div
+              class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition"
+            ></div>
+            <div class="relative z-10">
+              <h3 class="text-gray-900 font-bold tracking-widest text-sm">
+                SOM
+              </h3>
+              <p class="text-xs text-gray-800 font-semibold">
+                Target Market (Obtainable)
+              </p>
+            </div>
+            <div class="relative z-10">
+              <span class="text-5xl font-black text-gray-900">1.1 M</span>
+              <p class="text-xs text-gray-900 font-bold mt-2">
+                40% Market Share Target
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: COMPETITION -->
+    <div class="slide flex-col justify-center px-8 md:px-24">
+      <div class="max-w-7xl w-full mx-auto">
+        <h2
+          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-12 fade-up"
+        >
+          06. Competition Landscape
+        </h2>
+
+        <!-- Matrix Chart using CSS Grid -->
+        <div
+          class="relative h-[400px] w-full glass-panel rounded-2xl p-8 fade-up delay-100"
+        >
+          <!-- Axes -->
+          <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gray-600"></div>
+          <!-- Y Axis -->
+          <div class="absolute top-1/2 left-0 right-0 h-px bg-gray-600"></div>
+          <!-- X Axis -->
+
+          <!-- Labels -->
+          <span
+            class="absolute top-4 left-1/2 -translate-x-1/2 bg-gray-800 px-2 text-xs text-gray-400"
+            >High Price</span
+          >
+          <span
+            class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-gray-800 px-2 text-xs text-gray-400"
+            >Low Price</span
+          >
+          <span
+            class="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-800 px-2 text-xs text-gray-400"
+            >Limited Choice</span
+          >
+          <span
+            class="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-800 px-2 text-xs text-gray-400"
+            >High Customization</span
+          >
+
+          <!-- Competitors -->
+          <div
+            class="absolute top-[20%] right-[20%] flex flex-col items-center animate-pulse"
+          >
+            <div
+              class="w-4 h-4 bg-red-500 rounded-full shadow-[0_0_15px_red]"
+            ></div>
+            <span class="text-xs font-bold mt-1">Global Subs (Subway)</span>
+          </div>
+
+          <div
+            class="absolute bottom-[20%] left-[20%] flex flex-col items-center"
+          >
+            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+            <span class="text-xs text-gray-400 mt-1">Local Toast</span>
+          </div>
+
+          <div
+            class="absolute bottom-[30%] left-[30%] flex flex-col items-center"
+          >
+            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+            <span class="text-xs text-gray-400 mt-1">Street Food</span>
+          </div>
+
+          <!-- OUR POSITION -->
+          <div
+            class="absolute bottom-[40%] right-[25%] flex flex-col items-center z-10"
+          >
+            <div
+              class="w-6 h-6 bg-brand-green rounded-full border-4 border-white shadow-[0_0_20px_#10B981]"
+            ></div>
+            <span
+              class="text-sm font-black text-brand-green mt-2 bg-gray-900 px-2 rounded"
+              >STACKUP</span
+            >
+          </div>
+        </div>
+
+        <div class="mt-8 text-center fade-up delay-200">
+          <p class="text-xl text-gray-300">
+            "StackUp is the only player offering
+            <span class="text-brand-green font-bold">High Customization</span>
+            at an
+            <span class="text-brand-green font-bold"
+              >Affordable Price Point</span
+            >."
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: PRODUCT -->
+    <div class="slide flex-col justify-center px-8 md:px-24">
+      <div class="max-w-7xl w-full mx-auto">
+        <h2
+          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+        >
+          07. Signature Products
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 fade-up delay-100">
+          <!-- Product 1 -->
+          <div
+            class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-brand-green transition group shadow-lg"
+          >
+            <div class="h-64 bg-gray-700 relative overflow-hidden">
+              <img
+                src="geprek.png"
+                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-500"
+              />
+              <div
+                class="absolute top-4 right-4 bg-brand-green text-gray-900 text-xs font-bold px-3 py-1 rounded-full shadow-lg"
+              >
+                MARGIN LEADER (41%)
+              </div>
+            </div>
+            <div class="p-8">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-2xl font-bold">The Geprek Knockout</h3>
+                <span class="text-xl font-bold text-brand-green">Rp 30k</span>
+              </div>
+              <p class="text-gray-400 text-sm mb-6">
+                Roti Baguette + Ayam Geprek Suwir (Pedas) + Sambal Matah +
+                Sayuran Segar.
+              </p>
+              <div
+                class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden"
+              >
+                <div class="bg-yellow-500 h-full" style="width: 85%"></div>
+              </div>
+              <p class="text-xs text-yellow-500 mt-2 font-bold text-right">
+                Profitability Score: High
+              </p>
+            </div>
+          </div>
+
+          <!-- Product 2 -->
+          <div
+            class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-brand-green transition group shadow-lg"
+          >
+            <div class="h-64 bg-gray-700 relative overflow-hidden">
+              <img
+                src="rendang.png"
+                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-500"
+              />
+              <div
+                class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg"
+              >
+                CROWD FAVORITE
+              </div>
+            </div>
+            <div class="p-8">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-2xl font-bold">The Padang Pride</h3>
+                <span class="text-xl font-bold text-brand-green">Rp 30k</span>
+              </div>
+              <p class="text-gray-400 text-sm mb-6">
+                Roti Baguette + Rendang Sapi Suwir (Authentic) + Sambal Ijo +
+                Timun.
+              </p>
+              <div
+                class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden"
+              >
+                <div class="bg-blue-500 h-full" style="width: 70%"></div>
+              </div>
+              <p class="text-xs text-blue-500 mt-2 font-bold text-right">
+                Profitability Score: Med-High
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: BUSINESS MODEL -->
+    <div class="slide flex-col justify-center px-8 md:px-24">
+      <div class="max-w-7xl w-full mx-auto">
+        <h2
+          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+        >
+          08. Business Model
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-12">
+          <div class="fade-up delay-100">
+            <h3 class="text-2xl font-bold mb-6 border-b border-gray-700 pb-2">
+              Revenue Streams
+            </h3>
+            <div class="space-y-4">
+              <div
+                class="flex p-4 bg-gray-800 rounded-xl items-center hover:bg-gray-700 transition cursor-pointer"
+              >
+                <div
+                  class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-gray-900 font-bold text-lg mr-4"
+                >
+                  1
+                </div>
+                <div>
+                  <h4 class="font-bold">Direct Sales (A La Carte)</h4>
+                  <p class="text-xs text-gray-400">
+                    Primary income from Sandwich sales.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex p-4 bg-gray-800 rounded-xl items-center hover:bg-gray-700 transition cursor-pointer"
+              >
+                <div
+                  class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-gray-900 font-bold text-lg mr-4"
+                >
+                  2
+                </div>
+                <div>
+                  <h4 class="font-bold">Bundling Strategy</h4>
+                  <p class="text-xs text-gray-400">
+                    Increasing basket size via Drink Combos.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex p-4 bg-gray-800 rounded-xl items-center hover:bg-gray-700 transition cursor-pointer"
+              >
+                <div
+                  class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-gray-900 font-bold text-lg mr-4"
+                >
+                  3
+                </div>
+                <div>
+                  <h4 class="font-bold">Online Aggregators</h4>
+                  <p class="text-xs text-gray-400">
+                    GoFood, GrabFood, ShopeeFood (Volume).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fade-up delay-200">
+            <h3 class="text-2xl font-bold mb-6 border-b border-gray-700 pb-2">
+              Cost Structure
+            </h3>
+            <div class="glass-panel p-6 rounded-xl mb-4">
+              <div class="flex justify-between text-sm mb-2">
+                <span>COGS (HPP)</span>
+                <span class="font-bold text-red-400">~50-58%</span>
+              </div>
+              <div class="w-full bg-gray-700 h-2 rounded-full mb-4">
+                <div
+                  class="bg-red-500 h-full rounded-full"
+                  style="width: 58%"
+                ></div>
+              </div>
+              <div class="flex justify-between text-sm mb-2">
+                <span>Gross Margin</span>
+                <span class="font-bold text-brand-green">~42-50%</span>
+              </div>
+              <div class="w-full bg-gray-700 h-2 rounded-full">
+                <div
+                  class="bg-brand-green h-full rounded-full"
+                  style="width: 42%"
+                ></div>
+              </div>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl text-center">
+              <p class="text-sm text-gray-400 mb-2">Strategy</p>
+              <p class="font-bold text-xl text-white">"Lean Operations"</p>
+              <p class="text-xs text-gray-500 mt-1">
+                Kiosk Model + Centralized Prep
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: TEAM -->
+    <div class="slide flex-col justify-center px-8 md:px-24">
+      <div class="max-w-7xl w-full mx-auto">
+        <h2
+          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-12 text-center fade-up"
+        >
+          09. The Dream Team
+        </h2>
+
+        <div
+          class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center fade-up delay-100"
+        >
+          <!-- Fernando -->
+          <div
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+          >
+            <div
+              class="w-20 h-20 mx-auto bg-brand-green rounded-full flex items-center justify-center text-2xl font-black text-gray-900 mb-4 group-hover:scale-110 transition"
+            >
+              F
+            </div>
+            <h3 class="font-bold text-white">Fernando</h3>
+            <p class="text-xs text-brand-green font-bold mb-2">
+              PROJECT MANAGER
+            </p>
+            <p class="text-[10px] text-gray-400">Vision & Strategy</p>
+          </div>
+
+          <!-- Jojo -->
+          <div
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+          >
+            <div
+              class="w-20 h-20 mx-auto bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition"
+            >
+              J
+            </div>
+            <h3 class="font-bold text-white">Jojo</h3>
+            <p class="text-xs text-brand-accent mb-2">MARKETING</p>
+            <p class="text-[10px] text-gray-400">Customer Relations</p>
+          </div>
+
+          <!-- Hizkia -->
+          <div
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+          >
+            <div
+              class="w-20 h-20 mx-auto bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition"
+            >
+              H
+            </div>
+            <h3 class="font-bold text-white">Hizkia</h3>
+            <p class="text-xs text-brand-accent mb-2">HEAD CHEF</p>
+            <p class="text-[10px] text-gray-400">Food Quality</p>
+          </div>
+
+          <!-- Ferdinand -->
+          <div
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+          >
+            <div
+              class="w-20 h-20 mx-auto bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition"
+            >
+              F
+            </div>
+            <h3 class="font-bold text-white">Ferdinand</h3>
+            <p class="text-xs text-brand-accent mb-2">PRODUCTION</p>
+            <p class="text-[10px] text-gray-400">Efficiency & Assembly</p>
+          </div>
+
+          <!-- Alvin -->
+          <div
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+          >
+            <div
+              class="w-20 h-20 mx-auto bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition"
+            >
+              A
+            </div>
+            <h3 class="font-bold text-white">Alvin</h3>
+            <p class="text-xs text-brand-accent mb-2">LOGISTICS</p>
+            <p class="text-[10px] text-gray-400">Supply Chain</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: FINANCIAL -->
+    <div class="slide flex-col justify-center px-8 md:px-24">
+      <div class="max-w-7xl w-full mx-auto">
+        <h2
+          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+        >
+          10. Financial Feasibility
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12 fade-up delay-100">
+          <!-- Metric 1 -->
+          <div
+            class="bg-gray-800 border-t-4 border-blue-500 p-8 rounded-xl text-center"
+          >
+            <p class="text-gray-400 text-sm uppercase tracking-widest mb-2">
+              Startup Cost
+            </p>
+            <h3 class="text-4xl font-black text-white">Rp 29.7 Jt</h3>
+            <p class="text-xs text-gray-500 mt-2">Low Barrier to Entry</p>
+          </div>
+          <!-- Metric 2 -->
+          <div
+            class="bg-gray-800 border-t-4 border-yellow-500 p-8 rounded-xl text-center"
+          >
+            <p class="text-gray-400 text-sm uppercase tracking-widest mb-2">
+              Profit Margin
+            </p>
+            <h3 class="text-4xl font-black text-white">41.8%</h3>
+            <p class="text-xs text-gray-500 mt-2">On 'Geprek Knockout'</p>
+          </div>
+          <!-- Metric 3 -->
+          <div
+            class="bg-gray-800 border-t-4 border-green-500 p-8 rounded-xl text-center shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+          >
+            <p class="text-gray-400 text-sm uppercase tracking-widest mb-2">
+              ROI (Year 1)
+            </p>
+            <h3 class="text-4xl font-black text-brand-green">150%</h3>
+            <p class="text-xs text-gray-500 mt-2">Payback: 9.5 Months</p>
+          </div>
+        </div>
+
+        <div class="glass-panel p-8 rounded-2xl text-center fade-up delay-200">
+          <h4 class="text-2xl font-bold mb-4">The Verdict</h4>
+          <p class="text-xl text-gray-300 italic mb-6">
+            "StackUp is not just a sandwich shop. It is a validated, profitable,
+            and scalable business model ready for the Jakarta market."
+          </p>
+          <button
+            class="px-8 py-3 bg-brand-green text-gray-900 font-bold rounded-full hover:bg-brand-accent transition shadow-lg hover:shadow-brand-green/50"
+          >
+            Invest in Us
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+      // --- SLIDE LOGIC ---
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".slide");
+      const totalSlides = slides.length;
+      const progressBar = document.getElementById("progressBar");
+      const currentSlideNum = document.getElementById("currentSlideNum");
+
+      function updateUI() {
+        slides.forEach((slide, index) => {
+          if (index === currentSlide) {
+            slide.classList.add("active");
+            // Trigger animations for elements inside active slide
+            const animations = slide.querySelectorAll(".fade-up");
+            animations.forEach((el) => {
+              el.style.animation = "none";
+              el.offsetHeight; /* trigger reflow */
+              el.style.animation = null;
+            });
+          } else {
+            slide.classList.remove("active");
+          }
+        });
+
+        // Update Progress Bar
+        const progress = ((currentSlide + 1) / totalSlides) * 100;
+        progressBar.style.width = `${progress}%`;
+
+        // Update Number
+        currentSlideNum.innerText = (currentSlide + 1)
+          .toString()
+          .padStart(2, "0");
+      }
+
+      function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+          currentSlide++;
+          updateUI();
+        }
+      }
+
+      function prevSlide() {
+        if (currentSlide > 0) {
+          currentSlide--;
+          updateUI();
+        }
+      }
+
+      // Keyboard Navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "Enter") {
+          nextSlide();
+        } else if (e.key === "ArrowLeft") {
+          prevSlide();
+        }
+      });
+
+      // --- CHART.JS CONFIGURATION ---
+      // Set global defaults for dark mode look
+      Chart.defaults.color = "#9ca3af";
+      Chart.defaults.borderColor = "#374151";
+      Chart.defaults.font.family = "Inter";
+
+      // Render Charts when page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        updateUI();
+
+        // 1. Problem Chart
+        const ctxProblem = document.getElementById("chartProblem");
+        if (ctxProblem) {
+          new Chart(ctxProblem, {
+            type: "doughnut",
+            data: {
+              labels: [
+                "Sering sekali (bosan)",
+                "Kadang (bosan)",
+                "Jarang",
+                "Tidak",
+              ],
+              datasets: [
+                {
+                  data: [19, 10, 2, 0],
+                  backgroundColor: ["#ef4444", "#fbbf24", "#10b981", "#3b82f6"],
+                  borderWidth: 0,
+                  hoverOffset: 4,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { position: "right" } },
+            },
+          });
+        }
+
+        // 2. Price Chart
+        const ctxPrice = document.getElementById("chartPrice");
+        if (ctxPrice) {
+          new Chart(ctxPrice, {
+            type: "bar",
+            data: {
+              labels: [
+                "Sangat Murah",
+                "Murah",
+                "Sesuai",
+                "Agak Mahal",
+                "Sangat Mahal",
+              ],
+              datasets: [
+                {
+                  label: "Responden",
+                  data: [3, 0, 24, 4, 0],
+                  backgroundColor: [
+                    "#10b981",
+                    "#34D399",
+                    "#ef4444",
+                    "#fbbf24",
+                    "#ef4444",
+                  ],
+                  borderRadius: 4,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: { beginAtZero: true, grid: { display: false } },
+                x: { grid: { display: false } },
+              },
+              plugins: { legend: { display: false } },
+            },
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
