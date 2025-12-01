@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,6 +23,7 @@
 
     <script>
       tailwind.config = {
+        darkMode: "class", // Mengaktifkan dark mode manual
         theme: {
           extend: {
             fontFamily: { sans: ["Inter", "sans-serif"] },
@@ -30,6 +31,7 @@
               brand: {
                 green: "#10B981", // Emerald 500
                 dark: "#111827", // Gray 900
+                light: "#F3F4F6", // Gray 100
                 accent: "#34D399", // Emerald 400
               },
             },
@@ -41,8 +43,8 @@
     <style>
       body {
         overflow: hidden;
-        background-color: #111827;
-        color: white;
+        /* Transisi halus saat ganti mode */
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
 
       /* Slide Container */
@@ -55,7 +57,7 @@
         position: absolute;
         top: 0;
         left: 0;
-        overflow-y: auto; /* Allow scroll if content is too long on small screens */
+        overflow-y: auto;
       }
 
       .slide.active {
@@ -64,12 +66,21 @@
         z-index: 10;
       }
 
-      /* Glassmorphism Effect */
+      /* Glassmorphism Effect - ADAPTIVE */
       .glass-panel {
-        background: rgba(255, 255, 255, 0.05);
+        /* Light Mode Default */
+        background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark .glass-panel {
+        /* Dark Mode Override */
+        background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: none;
       }
 
       /* Animations */
@@ -101,20 +112,24 @@
         width: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #1f2937;
+        background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: #374151;
+        background: #9ca3af;
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #4b5563;
+        background: #6b7280;
       }
     </style>
   </head>
-  <body class="antialiased">
+  <body
+    class="antialiased bg-gray-50 text-gray-900 dark:bg-brand-dark dark:text-white"
+  >
     <!-- Progress Bar -->
-    <div class="fixed top-0 left-0 w-full h-1.5 z-50 bg-gray-800">
+    <div
+      class="fixed top-0 left-0 w-full h-1.5 z-50 bg-gray-200 dark:bg-gray-800"
+    >
       <div
         id="progressBar"
         class="h-full bg-brand-green transition-all duration-500 ease-out"
@@ -122,17 +137,25 @@
       ></div>
     </div>
 
+    <!-- Theme Toggle Button -->
+    <button
+      onclick="toggleTheme()"
+      class="fixed top-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg text-gray-800 dark:text-yellow-400 hover:scale-110 transition border border-gray-200 dark:border-gray-700"
+    >
+      <i id="themeIcon" class="fas fa-sun text-xl"></i>
+    </button>
+
     <!-- Navigation Buttons -->
     <div class="fixed bottom-8 right-8 z-50 flex gap-4">
       <button
         onclick="prevSlide()"
-        class="p-4 rounded-full glass-panel hover:bg-white/10 transition hover:scale-105 active:scale-95 text-brand-accent"
+        class="p-4 rounded-full glass-panel hover:bg-black/5 dark:hover:bg-white/10 transition hover:scale-105 active:scale-95 text-brand-green"
       >
         <i class="fas fa-arrow-left"></i>
       </button>
       <button
         onclick="nextSlide()"
-        class="p-4 rounded-full glass-panel hover:bg-white/10 transition hover:scale-105 active:scale-95 text-brand-accent"
+        class="p-4 rounded-full glass-panel hover:bg-black/5 dark:hover:bg-white/10 transition hover:scale-105 active:scale-95 text-brand-green"
       >
         <i class="fas fa-arrow-right"></i>
       </button>
@@ -140,10 +163,13 @@
 
     <!-- Slide Counter -->
     <div
-      class="fixed bottom-8 left-8 z-50 text-gray-500 font-mono text-sm tracking-widest"
+      class="fixed bottom-8 left-8 z-50 text-gray-500 dark:text-gray-400 font-mono text-sm tracking-widest bg-white/80 dark:bg-gray-900/50 px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
     >
-      SLIDE <span id="currentSlideNum" class="text-white font-bold">01</span> /
-      <span id="totalSlideNum">11</span>
+      SLIDE
+      <span id="currentSlideNum" class="text-gray-900 dark:text-white font-bold"
+        >01</span
+      >
+      / <span id="totalSlideNum">12</span>
     </div>
 
     <!-- ================= SLIDES START ================= -->
@@ -151,43 +177,54 @@
     <!-- SLIDE 1: COVER -->
     <div class="slide active flex-col justify-center items-center relative">
       <div class="absolute inset-0 z-0">
-        <!-- Background Image Placeholder -->
         <img
           src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=1920"
           class="w-full h-full object-cover opacity-20"
           alt="Sandwich Background"
         />
         <div
-          class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/80 to-transparent"
+          class="absolute inset-0 bg-gradient-to-t from-gray-50 via-gray-50/80 to-transparent dark:from-brand-dark dark:via-brand-dark/80"
         ></div>
       </div>
 
       <div class="relative z-10 text-center px-4">
         <div
-          class="inline-block px-4 py-1 mb-6 border border-brand-green/50 rounded-full text-brand-accent text-sm tracking-[0.3em] uppercase fade-up"
+          class="inline-block px-4 py-1 mb-6 border border-brand-green rounded-full text-brand-green text-sm tracking-[0.3em] uppercase fade-up shadow-lg dark:shadow-[0_0_15px_rgba(16,185,129,0.3)] bg-white dark:bg-transparent"
         >
           Market Validation Pitch
         </div>
         <h1
-          class="text-7xl md:text-9xl font-black mb-2 tracking-tighter fade-up delay-100"
+          class="text-7xl md:text-9xl font-black mb-2 tracking-tighter fade-up delay-100 text-gray-900 dark:text-white"
         >
           STACK<span class="text-brand-green">UP</span>
         </h1>
         <p
-          class="text-2xl md:text-4xl font-light text-gray-300 mb-12 italic fade-up delay-200"
+          class="text-2xl md:text-4xl font-light text-gray-600 dark:text-gray-200 mb-12 italic fade-up delay-200"
         >
           "Rasa Juara, Racik Suka-Suka."
         </p>
-        <div class="flex justify-center gap-4 fade-up delay-300">
-          <div class="text-left border-l-2 border-brand-green pl-4">
-            <p class="text-xs text-gray-500 uppercase tracking-wider">
+        <div class="flex justify-center gap-8 fade-up delay-300">
+          <div class="text-left border-l-4 border-brand-green pl-4">
+            <p
+              class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
               Presenting Team
             </p>
-            <p class="font-bold text-white">Stack Up</p>
+            <p class="font-bold text-gray-900 dark:text-white text-lg">
+              Fernando & Team
+            </p>
           </div>
-          <div class="text-left border-l-2 border-gray-700 pl-4">
-            <p class="text-xs text-gray-500 uppercase tracking-wider">Date</p>
-            <p class="font-bold text-white">November 2025</p>
+          <div
+            class="text-left border-l-4 border-gray-400 dark:border-gray-600 pl-4"
+          >
+            <p
+              class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"
+            >
+              Date
+            </p>
+            <p class="font-bold text-gray-900 dark:text-white text-lg">
+              November 2025
+            </p>
           </div>
         </div>
       </div>
@@ -197,12 +234,12 @@
     <div class="slide flex-col justify-center px-8 md:px-24">
       <div class="max-w-7xl w-full mx-auto">
         <h2
-          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-2 fade-up"
+          class="text-brand-green text-sm font-bold tracking-[0.2em] uppercase mb-4 fade-up"
         >
           01. Company Purpose
         </h2>
         <h3
-          class="text-4xl md:text-6xl font-bold mb-12 leading-tight fade-up delay-100"
+          class="text-4xl md:text-6xl font-bold mb-12 leading-tight fade-up delay-100 text-gray-900 dark:text-white"
         >
           Redefining Local Flavors for the
           <span class="text-brand-green">Urban Generation</span>.
@@ -210,52 +247,67 @@
 
         <div class="grid md:grid-cols-2 gap-12 items-center fade-up delay-200">
           <div
-            class="glass-panel p-10 rounded-2xl border-l-8 border-brand-green"
+            class="glass-panel p-10 rounded-2xl border-l-8 border-brand-green bg-gradient-to-br from-white/80 to-transparent dark:from-white/5"
           >
             <i class="fas fa-quote-left text-4xl text-brand-green/50 mb-6"></i>
-            <p class="text-2xl font-light leading-relaxed text-gray-200">
+            <p
+              class="text-2xl font-light leading-relaxed text-gray-800 dark:text-white"
+            >
               We exist to prove that
-              <b>authentic Indonesian heritage</b> (Rendang, Geprek) can be
-              transformed into a modern, customizable, and practical format that
-              fits the fast-paced lifestyle of today's youth.
+              <b class="text-brand-green">authentic Indonesian heritage</b>
+              (Rendang, Geprek) can be transformed into a modern, customizable,
+              and practical format that fits the fast-paced lifestyle of today's
+              youth.
             </p>
           </div>
           <div class="space-y-6">
-            <div class="flex items-start">
+            <div
+              class="flex items-start p-4 hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl transition"
+            >
               <div
                 class="w-12 h-12 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green mr-4 shrink-0"
               >
                 <i class="fas fa-layer-group"></i>
               </div>
               <div>
-                <h4 class="text-xl font-bold">Modern Format</h4>
-                <p class="text-gray-400">
+                <h4 class="text-xl font-bold text-gray-900 dark:text-white">
+                  Modern Format
+                </h4>
+                <p class="text-gray-600 dark:text-gray-300">
                   Sandwich format for grab-and-go convenience.
                 </p>
               </div>
             </div>
-            <div class="flex items-start">
+            <div
+              class="flex items-start p-4 hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl transition"
+            >
               <div
                 class="w-12 h-12 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green mr-4 shrink-0"
               >
                 <i class="fas fa-sliders-h"></i>
               </div>
               <div>
-                <h4 class="text-xl font-bold">Full Customization</h4>
-                <p class="text-gray-400">
+                <h4 class="text-xl font-bold text-gray-900 dark:text-white">
+                  Full Customization
+                </h4>
+                <p class="text-gray-600 dark:text-gray-300">
                   Empowering customers to build their own stack.
                 </p>
               </div>
             </div>
-            <div class="flex items-start">
+            <div
+              class="flex items-start p-4 hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl transition"
+            >
               <div
                 class="w-12 h-12 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green mr-4 shrink-0"
               >
                 <i class="fas fa-pepper-hot"></i>
               </div>
               <div>
-                <h4 class="text-xl font-bold">Authentic Taste</h4>
-                <p class="text-gray-400">
+                <h4 class="text-xl font-bold text-gray-900 dark:text-white">
+                  Authentic Taste
+                </h4>
+                <p class="text-gray-600 dark:text-gray-300">
                   No compromise on the richness of local spices.
                 </p>
               </div>
@@ -267,7 +319,7 @@
 
     <!-- SLIDE 3: PROBLEM -->
     <div
-      class="slide flex-col justify-center px-8 md:px-24 bg-gradient-to-br from-brand-dark to-gray-900"
+      class="slide flex-col justify-center px-8 md:px-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-brand-dark dark:to-gray-900"
     >
       <div class="max-w-7xl w-full mx-auto">
         <h2
@@ -279,34 +331,39 @@
         <div class="grid md:grid-cols-3 gap-8 fade-up delay-100">
           <!-- Problem 1 -->
           <div
-            class="glass-panel p-8 rounded-2xl hover:border-red-500/50 transition group"
+            class="glass-panel p-8 rounded-2xl hover:border-red-500/50 transition group border border-transparent bg-white/50 dark:bg-white/5"
           >
             <div
               class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition"
             >
               <i class="fas fa-utensils text-2xl text-red-500"></i>
             </div>
-            <h3 class="text-2xl font-bold mb-3">"Lunch Boredom"</h3>
-            <p class="text-gray-400 text-sm leading-relaxed">
+            <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
+              "Lunch Boredom"
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
               Mahasiswa & pekerja muda terjebak dalam siklus menu yang monoton:
               Ayam Goreng, Mi Instan, atau Warteg setiap hari.
-              <br /><span class="text-red-400 text-xs mt-2 block"
-                >*Validasi: 80% Responden kami merasakan ini.</span
+              <br /><span
+                class="text-red-500 dark:text-red-400 text-xs mt-4 block font-bold border-t border-red-500/30 pt-2"
+                >*Validasi: 80% Responden merasakan ini.</span
               >
             </p>
           </div>
 
           <!-- Problem 2 -->
           <div
-            class="glass-panel p-8 rounded-2xl hover:border-red-500/50 transition group"
+            class="glass-panel p-8 rounded-2xl hover:border-red-500/50 transition group border border-transparent bg-white/50 dark:bg-white/5"
           >
             <div
               class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition"
             >
               <i class="fas fa-tachometer-alt text-2xl text-red-500"></i>
             </div>
-            <h3 class="text-2xl font-bold mb-3">Lack of Agility</h3>
-            <p class="text-gray-400 text-sm leading-relaxed">
+            <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
+              Lack of Agility
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
               Makanan tradisional (Nasi Padang/Geprek) enak, tapi "berat", bikin
               ngantuk, dan ribet dimakan saat jam istirahat yang sempit atau
               sambil mobile.
@@ -315,18 +372,20 @@
 
           <!-- Problem 3 -->
           <div
-            class="glass-panel p-8 rounded-2xl hover:border-red-500/50 transition group"
+            class="glass-panel p-8 rounded-2xl hover:border-red-500/50 transition group border border-transparent bg-white/50 dark:bg-white/5"
           >
             <div
               class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition"
             >
               <i class="fas fa-wallet text-2xl text-red-500"></i>
             </div>
-            <h3 class="text-2xl font-bold mb-3">Price vs Quality Gap</h3>
-            <p class="text-gray-400 text-sm leading-relaxed">
+            <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
+              Price vs Quality
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
               Pilihan sandwich yang ada saat ini (Global Chains) terlalu mahal
               (>50k), sedangkan opsi roti lokal seringkali hanya dianggap
-              "camilan" (toast).
+              "camilan" (toast) yang kurang mengenyangkan.
             </p>
           </div>
         </div>
@@ -337,35 +396,51 @@
     <div class="slide flex-col justify-center px-8 md:px-24">
       <div class="max-w-7xl w-full mx-auto">
         <h2
-          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+          class="text-brand-green text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
         >
           03. The Solution
         </h2>
 
         <div class="flex flex-col md:flex-row gap-12 items-center">
           <div class="md:w-1/2 fade-up delay-100">
-            <h3 class="text-5xl md:text-6xl font-bold mb-6">
+            <h3
+              class="text-5xl md:text-6xl font-bold mb-6 text-gray-900 dark:text-white"
+            >
               The <span class="text-brand-green">StackUp</span> Experience
             </h3>
-            <p class="text-xl text-gray-300 mb-8">
+            <p class="text-xl text-gray-600 dark:text-gray-200 mb-8">
               Platform kuliner pertama yang menggabungkan
-              <span class="font-bold text-white">Cita Rasa Lokal</span> dengan
-              konsep
-              <span class="font-bold text-white">"Build-Your-Own-Sub"</span>.
+              <span class="font-bold text-brand-green dark:text-brand-accent"
+                >Cita Rasa Lokal</span
+              >
+              dengan konsep
+              <span class="font-bold text-brand-green dark:text-brand-accent"
+                >"Build-Your-Own-Sub"</span
+              >.
             </p>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
+            <div
+              class="grid grid-cols-2 gap-4 text-gray-600 dark:text-gray-300"
+            >
+              <div
+                class="flex items-center gap-3 bg-white dark:bg-white/5 p-3 rounded-lg border border-gray-200 dark:border-white/10 shadow-sm"
+              >
                 <i class="fas fa-check-circle text-brand-green"></i> Authentic
                 Recipes
               </div>
-              <div class="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
+              <div
+                class="flex items-center gap-3 bg-white dark:bg-white/5 p-3 rounded-lg border border-gray-200 dark:border-white/10 shadow-sm"
+              >
                 <i class="fas fa-check-circle text-brand-green"></i> Fresh Daily
               </div>
-              <div class="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
+              <div
+                class="flex items-center gap-3 bg-white dark:bg-white/5 p-3 rounded-lg border border-gray-200 dark:border-white/10 shadow-sm"
+              >
                 <i class="fas fa-check-circle text-brand-green"></i> 100%
                 Customizable
               </div>
-              <div class="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
+              <div
+                class="flex items-center gap-3 bg-white dark:bg-white/5 p-3 rounded-lg border border-gray-200 dark:border-white/10 shadow-sm"
+              >
                 <i class="fas fa-check-circle text-brand-green"></i> Affordable
                 Premium
               </div>
@@ -373,57 +448,64 @@
           </div>
 
           <div class="md:w-1/2 w-full fade-up delay-200">
-            <!-- Visual Representation of Stacking -->
             <div class="relative">
               <div
                 class="absolute -inset-1 bg-gradient-to-r from-brand-green to-blue-600 rounded-2xl blur opacity-30"
               ></div>
               <div
-                class="relative bg-gray-900 p-8 rounded-2xl border border-gray-700"
+                class="relative bg-gray-50 dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-2xl"
               >
                 <h4
-                  class="text-center font-bold mb-6 text-gray-400 tracking-widest"
+                  class="text-center font-bold mb-6 text-gray-500 dark:text-gray-400 tracking-widest border-b border-gray-300 dark:border-gray-700 pb-4"
                 >
                   HOW IT WORKS
                 </h4>
                 <div class="space-y-3">
                   <div
-                    class="p-4 bg-gray-800 rounded-lg border-l-4 border-yellow-500 flex justify-between items-center"
+                    class="p-4 bg-white dark:bg-gray-800 rounded-lg border-l-4 border-yellow-500 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition shadow-sm"
                   >
-                    <span
-                      ><i class="fas fa-bread-slice mr-2 text-yellow-500"></i>
+                    <span class="text-gray-900 dark:text-white font-semibold"
+                      ><i class="fas fa-bread-slice mr-3 text-yellow-500"></i>
                       1. Pilih Base</span
                     >
-                    <span class="text-xs text-gray-500">Baguette / Wheat</span>
+                    <span
+                      class="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-black/30 px-2 py-1 rounded"
+                      >Baguette / Wheat</span
+                    >
                   </div>
                   <div
-                    class="p-4 bg-gray-800 rounded-lg border-l-4 border-red-500 flex justify-between items-center"
+                    class="p-4 bg-white dark:bg-gray-800 rounded-lg border-l-4 border-red-500 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition shadow-sm"
                   >
-                    <span
-                      ><i class="fas fa-drumstick-bite mr-2 text-red-500"></i>
+                    <span class="text-gray-900 dark:text-white font-semibold"
+                      ><i class="fas fa-drumstick-bite mr-3 text-red-500"></i>
                       2. Pilih Protein</span
                     >
-                    <span class="text-xs text-gray-500">Rendang / Geprek</span>
+                    <span
+                      class="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-black/30 px-2 py-1 rounded"
+                      >Rendang / Geprek</span
+                    >
                   </div>
                   <div
-                    class="p-4 bg-gray-800 rounded-lg border-l-4 border-green-500 flex justify-between items-center"
+                    class="p-4 bg-white dark:bg-gray-800 rounded-lg border-l-4 border-green-500 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition shadow-sm"
                   >
-                    <span
-                      ><i class="fas fa-leaf mr-2 text-green-500"></i> 3. Pilih
+                    <span class="text-gray-900 dark:text-white font-semibold"
+                      ><i class="fas fa-leaf mr-3 text-green-500"></i> 3. Pilih
                       Sayur</span
                     >
-                    <span class="text-xs text-gray-500"
-                      >Selada / Tomat / Timun</span
+                    <span
+                      class="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-black/30 px-2 py-1 rounded"
+                      >Fresh Veggies</span
                     >
                   </div>
                   <div
-                    class="p-4 bg-gray-800 rounded-lg border-l-4 border-orange-500 flex justify-between items-center"
+                    class="p-4 bg-white dark:bg-gray-800 rounded-lg border-l-4 border-orange-500 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition shadow-sm"
                   >
-                    <span
-                      ><i class="fas fa-fill-drip mr-2 text-orange-500"></i> 4.
+                    <span class="text-gray-900 dark:text-white font-semibold"
+                      ><i class="fas fa-fill-drip mr-3 text-orange-500"></i> 4.
                       Pilih Saus</span
                     >
-                    <span class="text-xs text-gray-500"
+                    <span
+                      class="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-black/30 px-2 py-1 rounded"
                       >Matah / Ijo / Bawang</span
                     >
                   </div>
@@ -439,59 +521,78 @@
     <div class="slide flex-col justify-center px-8 md:px-24">
       <div class="max-w-7xl w-full mx-auto">
         <h2
-          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+          class="text-brand-green text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
         >
-          04. Market Validation (Why Now?)
+          04. Market Validation
+          <span
+            class="bg-brand-green/20 text-brand-green px-2 py-1 rounded ml-2 normal-case text-xs tracking-normal"
+            >(n=31 Responden)</span
+          >
         </h2>
 
         <div class="grid md:grid-cols-2 gap-8 fade-up delay-100">
           <!-- Data Insight 1 -->
-          <div class="glass-panel p-6 rounded-2xl">
-            <h3 class="text-lg font-bold mb-4 flex items-center">
+          <div
+            class="glass-panel p-6 rounded-2xl border border-gray-200 dark:border-white/10"
+          >
+            <h3
+              class="text-lg font-bold mb-4 flex items-center text-gray-900 dark:text-white"
+            >
               <i class="fas fa-chart-pie mr-3 text-brand-green"></i> Validasi
               Masalah
             </h3>
             <div class="h-48 relative">
               <canvas id="chartProblem"></canvas>
             </div>
-            <p class="text-center text-sm text-gray-400 mt-4">
-              Mayoritas responden merasa bosan dengan opsi makan siang saat ini.
+            <p
+              class="text-center text-sm text-gray-600 dark:text-gray-300 mt-4 bg-gray-100 dark:bg-black/30 py-2 rounded-lg"
+            >
+              Sebagian besar responden merasa <b>sering sekali bosan</b> dengan
+              menu makan siang.
             </p>
           </div>
 
           <!-- Data Insight 2 -->
-          <div class="glass-panel p-6 rounded-2xl">
-            <h3 class="text-lg font-bold mb-4 flex items-center">
+          <div
+            class="glass-panel p-6 rounded-2xl border border-gray-200 dark:border-white/10"
+          >
+            <h3
+              class="text-lg font-bold mb-4 flex items-center text-gray-900 dark:text-white"
+            >
               <i class="fas fa-tags mr-3 text-brand-green"></i> Validasi Harga
             </h3>
             <div class="h-48 relative">
               <canvas id="chartPrice"></canvas>
             </div>
-            <p class="text-center text-sm text-gray-400 mt-4">
-              Harga Rp 30.000 diterima sebagai "Value for Money".
+            <p
+              class="text-center text-sm text-gray-600 dark:text-gray-300 mt-4 bg-gray-100 dark:bg-black/30 py-2 rounded-lg"
+            >
+              <b>24 dari 31 Responden</b> menganggap harga Rp 30.000 "Sesuai".
             </p>
           </div>
         </div>
 
-        <div class="mt-8 glass-panel p-6 rounded-xl fade-up delay-200">
-          <div class="flex items-center gap-4">
+        <div
+          class="mt-8 glass-panel p-6 rounded-xl fade-up delay-200 border-l-4 border-brand-green"
+        >
+          <div class="flex items-center gap-6">
             <div
-              class="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center text-3xl"
+              class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-3xl shrink-0 border-2 border-brand-green/50"
             >
               🎓
             </div>
             <div>
-              <h4 class="text-xl font-bold text-white">
-                Persona: "Rina" (Gen Z Student)
+              <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
+                Target Persona: "Mahasiswa Urban" (Gen Z)
               </h4>
-              <p class="text-gray-400 italic">
-                "Mahasiswi, jadwal padat, butuh makan cepat, suka mencoba hal
-                baru yang 'Instagrammable', dan sensitif harga"
+              <p class="text-gray-600 dark:text-gray-300 italic text-sm">
+                "Suka coba yang baru, peduli konten visual (Instagrammable),
+                tapi dompet mahasiswa. Mencari <b>Value for Money</b>."
               </p>
             </div>
             <div class="ml-auto hidden md:block">
               <span
-                class="px-4 py-2 bg-green-500/20 text-brand-green rounded-full text-sm font-bold"
+                class="px-4 py-2 bg-green-500/20 text-brand-green rounded-full text-sm font-bold border border-green-500/50"
                 >MATCHED</span
               >
             </div>
@@ -504,7 +605,7 @@
     <div class="slide flex-col justify-center px-8 md:px-24">
       <div class="max-w-7xl w-full mx-auto text-center">
         <h2
-          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-12 fade-up"
+          class="text-brand-green text-sm font-bold tracking-[0.2em] uppercase mb-12 fade-up"
         >
           05. Market Opportunity
         </h2>
@@ -514,13 +615,15 @@
         >
           <!-- TAM -->
           <div
-            class="w-full md:w-1/3 h-full bg-gray-800 rounded-t-2xl p-6 flex flex-col justify-between border-t-4 border-gray-600 relative overflow-hidden group"
+            class="w-full md:w-1/3 h-full bg-white dark:bg-gray-800 rounded-t-2xl p-6 flex flex-col justify-between border-t-4 border-gray-400 dark:border-gray-600 relative overflow-hidden group hover:bg-gray-50 dark:hover:bg-gray-750 transition shadow-lg"
           >
             <div
-              class="absolute inset-0 bg-gradient-to-b from-gray-700/20 to-transparent opacity-0 group-hover:opacity-100 transition"
+              class="absolute inset-0 bg-gradient-to-b from-gray-200/50 dark:from-gray-700/20 to-transparent opacity-0 group-hover:opacity-100 transition"
             ></div>
             <div class="relative z-10">
-              <h3 class="text-gray-400 font-bold tracking-widest text-sm">
+              <h3
+                class="text-gray-500 dark:text-gray-400 font-bold tracking-widest text-sm"
+              >
                 TAM
               </h3>
               <p class="text-xs text-gray-500">
@@ -528,8 +631,10 @@
               </p>
             </div>
             <div class="relative z-10">
-              <span class="text-5xl font-black text-white">75.7 M</span>
-              <p class="text-xs text-gray-400 mt-2">
+              <span class="text-5xl font-black text-gray-800 dark:text-white"
+                >75.7 M</span
+              >
+              <p class="text-xs text-gray-500 mt-2">
                 Populasi Usia 18-35 Tahun (BPS 2025)
               </p>
             </div>
@@ -537,13 +642,15 @@
 
           <!-- SAM -->
           <div
-            class="w-full md:w-1/3 h-[75%] bg-gray-800 rounded-t-2xl p-6 flex flex-col justify-between border-t-4 border-brand-accent relative overflow-hidden group"
+            class="w-full md:w-1/3 h-[75%] bg-white dark:bg-gray-800 rounded-t-2xl p-6 flex flex-col justify-between border-t-4 border-brand-green dark:border-brand-accent relative overflow-hidden group hover:bg-gray-50 dark:hover:bg-gray-750 transition shadow-lg"
           >
             <div
-              class="absolute inset-0 bg-gradient-to-b from-brand-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition"
+              class="absolute inset-0 bg-gradient-to-b from-brand-green/10 dark:from-brand-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition"
             ></div>
             <div class="relative z-10">
-              <h3 class="text-brand-accent font-bold tracking-widest text-sm">
+              <h3
+                class="text-brand-green dark:text-brand-accent font-bold tracking-widest text-sm"
+              >
                 SAM
               </h3>
               <p class="text-xs text-gray-500">
@@ -551,8 +658,10 @@
               </p>
             </div>
             <div class="relative z-10">
-              <span class="text-5xl font-black text-white">2.76 M</span>
-              <p class="text-xs text-gray-400 mt-2">
+              <span class="text-5xl font-black text-gray-800 dark:text-white"
+                >2.76 M</span
+              >
+              <p class="text-xs text-gray-500 mt-2">
                 Target Demografi di DKI Jakarta
               </p>
             </div>
@@ -563,19 +672,23 @@
             class="w-full md:w-1/3 h-[45%] bg-brand-green rounded-t-2xl p-6 flex flex-col justify-between shadow-[0_0_30px_rgba(16,185,129,0.4)] relative overflow-hidden group"
           >
             <div
-              class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition"
+              class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition"
             ></div>
             <div class="relative z-10">
-              <h3 class="text-gray-900 font-bold tracking-widest text-sm">
+              <h3
+                class="text-white dark:text-gray-900 font-bold tracking-widest text-sm"
+              >
                 SOM
               </h3>
-              <p class="text-xs text-gray-800 font-semibold">
+              <p class="text-xs text-white/80 dark:text-gray-800 font-semibold">
                 Target Market (Obtainable)
               </p>
             </div>
             <div class="relative z-10">
-              <span class="text-5xl font-black text-gray-900">1.1 M</span>
-              <p class="text-xs text-gray-900 font-bold mt-2">
+              <span class="text-5xl font-black text-white dark:text-gray-900"
+                >1.1 M</span
+              >
+              <p class="text-xs text-white dark:text-gray-900 font-bold mt-2">
                 40% Market Share Target
               </p>
             </div>
@@ -584,83 +697,136 @@
       </div>
     </div>
 
-    <!-- SLIDE 7: COMPETITION -->
+    <!-- SLIDE 7: COMPETITION (ADAPTIVE LIGHT/DARK) -->
     <div class="slide flex-col justify-center px-8 md:px-24">
       <div class="max-w-7xl w-full mx-auto">
         <h2
-          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-12 fade-up"
+          class="text-brand-green text-sm font-bold tracking-[0.2em] uppercase mb-12 fade-up"
         >
           06. Competition Landscape
         </h2>
 
-        <!-- Matrix Chart using CSS Grid -->
+        <!-- Matrix Chart using CSS Grid - ADAPTIVE -->
         <div
-          class="relative h-[400px] w-full glass-panel rounded-2xl p-8 fade-up delay-100"
+          class="relative h-[450px] w-full bg-white dark:bg-gray-800 rounded-2xl p-8 fade-up delay-100 shadow-2xl overflow-hidden transition-colors duration-300"
         >
-          <!-- Axes -->
-          <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gray-600"></div>
+          <!-- Grid Lines -->
+          <div
+            class="absolute inset-0 grid grid-cols-4 grid-rows-4 pointer-events-none opacity-10"
+          >
+            <div
+              class="border-r border-b border-gray-900 dark:border-white"
+            ></div>
+            <div
+              class="border-r border-b border-gray-900 dark:border-white"
+            ></div>
+            <div
+              class="border-r border-b border-gray-900 dark:border-white"
+            ></div>
+            <div class="border-b border-gray-900 dark:border-white"></div>
+            <div
+              class="border-r border-b border-gray-900 dark:border-white"
+            ></div>
+            <div
+              class="border-r border-b border-gray-900 dark:border-white"
+            ></div>
+            <div
+              class="border-r border-b border-gray-900 dark:border-white"
+            ></div>
+            <div class="border-b border-gray-900 dark:border-white"></div>
+            <div
+              class="border-r border-b border-gray-900 dark:border-white"
+            ></div>
+            <div
+              class="border-r border-b border-gray-900 dark:border-white"
+            ></div>
+            <div
+              class="border-r border-b border-gray-900 dark:border-white"
+            ></div>
+            <div class="border-b border-gray-900 dark:border-white"></div>
+            <div class="border-r border-gray-900 dark:border-white"></div>
+            <div class="border-r border-gray-900 dark:border-white"></div>
+            <div class="border-r border-gray-900 dark:border-white"></div>
+            <div></div>
+          </div>
+
+          <!-- Axes Lines -->
+          <div class="absolute left-1/2 top-8 bottom-8 w-0.5 bg-gray-400"></div>
           <!-- Y Axis -->
-          <div class="absolute top-1/2 left-0 right-0 h-px bg-gray-600"></div>
+          <div class="absolute top-1/2 left-8 right-8 h-0.5 bg-gray-400"></div>
           <!-- X Axis -->
 
-          <!-- Labels -->
+          <!-- Axis Labels -->
           <span
-            class="absolute top-4 left-1/2 -translate-x-1/2 bg-gray-800 px-2 text-xs text-gray-400"
+            class="absolute top-2 left-1/2 -translate-x-1/2 bg-gray-200 dark:bg-gray-700 px-3 py-1 text-xs font-bold text-gray-700 dark:text-gray-200 rounded-full shadow"
             >High Price</span
           >
           <span
-            class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-gray-800 px-2 text-xs text-gray-400"
+            class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-gray-200 dark:bg-gray-700 px-3 py-1 text-xs font-bold text-gray-700 dark:text-gray-200 rounded-full shadow"
             >Low Price</span
           >
           <span
-            class="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-800 px-2 text-xs text-gray-400"
+            class="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-200 dark:bg-gray-700 px-3 py-1 text-xs font-bold text-gray-700 dark:text-gray-200 rounded-full shadow"
             >Limited Choice</span
           >
           <span
-            class="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-800 px-2 text-xs text-gray-400"
+            class="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 dark:bg-gray-700 px-3 py-1 text-xs font-bold text-gray-700 dark:text-gray-200 rounded-full shadow"
             >High Customization</span
           >
 
           <!-- Competitors -->
           <div
-            class="absolute top-[20%] right-[20%] flex flex-col items-center animate-pulse"
+            class="absolute top-[20%] right-[20%] flex flex-col items-center animate-pulse z-10"
           >
             <div
-              class="w-4 h-4 bg-red-500 rounded-full shadow-[0_0_15px_red]"
+              class="w-5 h-5 bg-red-600 rounded-full shadow-lg border-2 border-white"
             ></div>
-            <span class="text-xs font-bold mt-1">Global Subs (Subway)</span>
+            <span
+              class="text-xs font-bold mt-1 text-gray-800 dark:text-gray-200 bg-white/80 dark:bg-black/50 px-1 rounded"
+              >Global Subs (Subway)</span
+            >
           </div>
 
           <div
-            class="absolute bottom-[20%] left-[20%] flex flex-col items-center"
+            class="absolute bottom-[25%] left-[25%] flex flex-col items-center z-10"
           >
-            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
-            <span class="text-xs text-gray-400 mt-1">Local Toast</span>
+            <div
+              class="w-4 h-4 bg-gray-500 rounded-full shadow-lg border-2 border-white"
+            ></div>
+            <span
+              class="text-xs font-bold mt-1 text-gray-600 dark:text-gray-400 bg-white/80 dark:bg-black/50 px-1 rounded"
+              >Local Toast</span
+            >
           </div>
 
           <div
-            class="absolute bottom-[30%] left-[30%] flex flex-col items-center"
+            class="absolute bottom-[35%] left-[35%] flex flex-col items-center z-10"
           >
-            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
-            <span class="text-xs text-gray-400 mt-1">Street Food</span>
+            <div
+              class="w-4 h-4 bg-gray-500 rounded-full shadow-lg border-2 border-white"
+            ></div>
+            <span
+              class="text-xs font-bold mt-1 text-gray-600 dark:text-gray-400 bg-white/80 dark:bg-black/50 px-1 rounded"
+              >Street Food</span
+            >
           </div>
 
           <!-- OUR POSITION -->
           <div
-            class="absolute bottom-[40%] right-[25%] flex flex-col items-center z-10"
+            class="absolute bottom-[40%] right-[25%] flex flex-col items-center z-20"
           >
             <div
-              class="w-6 h-6 bg-brand-green rounded-full border-4 border-white shadow-[0_0_20px_#10B981]"
+              class="w-8 h-8 bg-brand-green rounded-full border-4 border-white shadow-[0_0_20px_#10B981]"
             ></div>
             <span
-              class="text-sm font-black text-brand-green mt-2 bg-gray-900 px-2 rounded"
+              class="text-sm font-black text-white mt-1 bg-brand-dark px-3 py-1 rounded shadow-lg"
               >STACKUP</span
             >
           </div>
         </div>
 
         <div class="mt-8 text-center fade-up delay-200">
-          <p class="text-xl text-gray-300">
+          <p class="text-xl text-gray-700 dark:text-gray-300">
             "StackUp is the only player offering
             <span class="text-brand-green font-bold">High Customization</span>
             at an
@@ -676,7 +842,7 @@
     <div class="slide flex-col justify-center px-8 md:px-24">
       <div class="max-w-7xl w-full mx-auto">
         <h2
-          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+          class="text-brand-green text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
         >
           07. Signature Products
         </h2>
@@ -684,9 +850,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 fade-up delay-100">
           <!-- Product 1 -->
           <div
-            class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-brand-green transition group shadow-lg"
+            class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-brand-green transition group shadow-lg"
           >
-            <div class="h-64 bg-gray-700 relative overflow-hidden">
+            <div
+              class="h-64 bg-gray-200 dark:bg-gray-700 relative overflow-hidden"
+            >
               <img
                 src="geprek.png"
                 class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-500"
@@ -699,15 +867,17 @@
             </div>
             <div class="p-8">
               <div class="flex justify-between items-start mb-4">
-                <h3 class="text-2xl font-bold">The Geprek Knockout</h3>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+                  The Geprek Knockout
+                </h3>
                 <span class="text-xl font-bold text-brand-green">Rp 30k</span>
               </div>
-              <p class="text-gray-400 text-sm mb-6">
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-6">
                 Roti Baguette + Ayam Geprek Suwir (Pedas) + Sambal Matah +
                 Sayuran Segar.
               </p>
               <div
-                class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden"
+                class="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden"
               >
                 <div class="bg-yellow-500 h-full" style="width: 85%"></div>
               </div>
@@ -719,11 +889,13 @@
 
           <!-- Product 2 -->
           <div
-            class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-brand-green transition group shadow-lg"
+            class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-brand-green transition group shadow-lg"
           >
-            <div class="h-64 bg-gray-700 relative overflow-hidden">
+            <div
+              class="h-64 bg-gray-200 dark:bg-gray-700 relative overflow-hidden"
+            >
               <img
-                src="rendang.png"
+                src="padang.png"
                 class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-500"
               />
               <div
@@ -734,15 +906,17 @@
             </div>
             <div class="p-8">
               <div class="flex justify-between items-start mb-4">
-                <h3 class="text-2xl font-bold">The Padang Pride</h3>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+                  The Padang Pride
+                </h3>
                 <span class="text-xl font-bold text-brand-green">Rp 30k</span>
               </div>
-              <p class="text-gray-400 text-sm mb-6">
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-6">
                 Roti Baguette + Rendang Sapi Suwir (Authentic) + Sambal Ijo +
                 Timun.
               </p>
               <div
-                class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden"
+                class="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden"
               >
                 <div class="bg-blue-500 h-full" style="width: 70%"></div>
               </div>
@@ -755,63 +929,72 @@
       </div>
     </div>
 
-    <!-- SLIDE 9: BUSINESS MODEL -->
+    <!-- SLIDE 9: BUSINESS MODEL (WITH EXPLANATION) -->
     <div class="slide flex-col justify-center px-8 md:px-24">
       <div class="max-w-7xl w-full mx-auto">
         <h2
-          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+          class="text-brand-green text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
         >
           08. Business Model
         </h2>
 
         <div class="grid md:grid-cols-2 gap-12">
           <div class="fade-up delay-100">
-            <h3 class="text-2xl font-bold mb-6 border-b border-gray-700 pb-2">
+            <h3
+              class="text-2xl font-bold mb-6 border-b border-gray-300 dark:border-gray-700 pb-2 text-gray-900 dark:text-white"
+            >
               Revenue Streams
             </h3>
             <div class="space-y-4">
               <div
-                class="flex p-4 bg-gray-800 rounded-xl items-center hover:bg-gray-700 transition cursor-pointer"
+                class="flex p-4 bg-white dark:bg-gray-800 rounded-xl items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer border border-gray-200 dark:border-transparent hover:border-gray-300 dark:hover:border-gray-600 shadow-sm"
               >
                 <div
-                  class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-gray-900 font-bold text-lg mr-4"
+                  class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-gray-900 font-bold text-lg mr-4 shadow-lg shrink-0"
                 >
                   1
                 </div>
                 <div>
-                  <h4 class="font-bold">Direct Sales (A La Carte)</h4>
-                  <p class="text-xs text-gray-400">
+                  <h4 class="font-bold text-gray-900 dark:text-white">
+                    Direct Sales (A La Carte)
+                  </h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
                     Primary income from Sandwich sales.
                   </p>
                 </div>
               </div>
               <div
-                class="flex p-4 bg-gray-800 rounded-xl items-center hover:bg-gray-700 transition cursor-pointer"
+                class="flex p-4 bg-white dark:bg-gray-800 rounded-xl items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer border border-gray-200 dark:border-transparent hover:border-gray-300 dark:hover:border-gray-600 shadow-sm"
               >
                 <div
-                  class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-gray-900 font-bold text-lg mr-4"
+                  class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-gray-900 font-bold text-lg mr-4 shadow-lg shrink-0"
                 >
                   2
                 </div>
                 <div>
-                  <h4 class="font-bold">Bundling Strategy</h4>
-                  <p class="text-xs text-gray-400">
-                    Increasing basket size via Drink Combos.
+                  <h4 class="font-bold text-gray-900 dark:text-white">
+                    Bundling Strategy
+                  </h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    Increasing average order value via Drink Combos.
                   </p>
                 </div>
               </div>
               <div
-                class="flex p-4 bg-gray-800 rounded-xl items-center hover:bg-gray-700 transition cursor-pointer"
+                class="flex p-4 bg-white dark:bg-gray-800 rounded-xl items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer border border-gray-200 dark:border-transparent hover:border-gray-300 dark:hover:border-gray-600 shadow-sm"
               >
                 <div
-                  class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-gray-900 font-bold text-lg mr-4"
+                  class="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-gray-900 font-bold text-lg mr-4 shadow-lg shrink-0"
                 >
                   3
                 </div>
                 <div>
-                  <h4 class="font-bold">Online Aggregators</h4>
-                  <p class="text-xs text-gray-400">
-                    GoFood, GrabFood, ShopeeFood (Volume).
+                  <h4 class="font-bold text-gray-900 dark:text-white">
+                    Online Aggregators
+                  </h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    Leveraging GoFood/GrabFood for high volume sales outside
+                    campus area.
                   </p>
                 </div>
               </div>
@@ -819,35 +1002,70 @@
           </div>
 
           <div class="fade-up delay-200">
-            <h3 class="text-2xl font-bold mb-6 border-b border-gray-700 pb-2">
+            <h3
+              class="text-2xl font-bold mb-6 border-b border-gray-300 dark:border-gray-700 pb-2 text-gray-900 dark:text-white"
+            >
               Cost Structure
             </h3>
             <div class="glass-panel p-6 rounded-xl mb-4">
               <div class="flex justify-between text-sm mb-2">
-                <span>COGS (HPP)</span>
-                <span class="font-bold text-red-400">~50-58%</span>
+                <span
+                  class="text-gray-800 dark:text-gray-300 font-semibold flex items-center"
+                >
+                  COGS (HPP)
+                  <span
+                    class="ml-2 text-[10px] bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600"
+                    >*Biaya Bahan Baku & Kemasan</span
+                  >
+                </span>
+                <span class="font-bold text-red-500 dark:text-red-400"
+                  >~50-58%</span
+                >
               </div>
-              <div class="w-full bg-gray-700 h-2 rounded-full mb-4">
+              <div
+                class="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full mb-2"
+              >
                 <div
                   class="bg-red-500 h-full rounded-full"
                   style="width: 58%"
                 ></div>
               </div>
+              <p class="text-xs text-gray-600 dark:text-gray-400 mb-6 italic">
+                Higher COGS due to using premium ingredients (Beef Rendang)
+                while keeping price affordable (Rp 30k) for customer
+                acquisition.
+              </p>
+
               <div class="flex justify-between text-sm mb-2">
-                <span>Gross Margin</span>
+                <span class="text-gray-800 dark:text-gray-300 font-semibold"
+                  >Gross Margin</span
+                >
                 <span class="font-bold text-brand-green">~42-50%</span>
               </div>
-              <div class="w-full bg-gray-700 h-2 rounded-full">
+              <div
+                class="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full mb-2"
+              >
                 <div
                   class="bg-brand-green h-full rounded-full"
                   style="width: 42%"
                 ></div>
               </div>
+              <p class="text-xs text-gray-600 dark:text-gray-400 italic">
+                Maintained healthy via lean operations and centralized prep.
+              </p>
             </div>
-            <div class="bg-gray-800 p-6 rounded-xl text-center">
-              <p class="text-sm text-gray-400 mb-2">Strategy</p>
-              <p class="font-bold text-xl text-white">"Lean Operations"</p>
-              <p class="text-xs text-gray-500 mt-1">
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-xl text-center border border-gray-200 dark:border-gray-700"
+            >
+              <p
+                class="text-sm text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide"
+              >
+                Strategy
+              </p>
+              <p class="font-bold text-2xl text-gray-900 dark:text-white">
+                "Lean Operations"
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
                 Kiosk Model + Centralized Prep
               </p>
             </div>
@@ -860,7 +1078,7 @@
     <div class="slide flex-col justify-center px-8 md:px-24">
       <div class="max-w-7xl w-full mx-auto">
         <h2
-          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-12 text-center fade-up"
+          class="text-brand-green text-sm font-bold tracking-[0.2em] uppercase mb-12 text-center fade-up"
         >
           09. The Dream Team
         </h2>
@@ -870,84 +1088,104 @@
         >
           <!-- Fernando -->
           <div
-            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group bg-white/50 dark:bg-white/5"
           >
             <div
-              class="w-20 h-20 mx-auto bg-brand-green rounded-full flex items-center justify-center text-2xl font-black text-gray-900 mb-4 group-hover:scale-110 transition"
+              class="w-20 h-20 mx-auto bg-brand-green rounded-full flex items-center justify-center text-2xl font-black text-gray-900 mb-4 group-hover:scale-110 transition shadow-lg"
             >
               F
             </div>
-            <h3 class="font-bold text-white">Fernando</h3>
-            <p class="text-xs text-brand-green font-bold mb-2">
-              PROJECT MANAGER
+            <h3 class="font-bold text-gray-900 dark:text-white text-lg">
+              Fernando
+            </h3>
+            <p class="text-xs text-brand-green font-bold mb-2 uppercase">
+              Project Manager
             </p>
-            <p class="text-[10px] text-gray-400">Vision & Strategy</p>
+            <p class="text-[10px] text-gray-600 dark:text-gray-300">
+              Vision & Strategy
+            </p>
           </div>
 
           <!-- Jojo -->
           <div
-            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group bg-white/50 dark:bg-white/5"
           >
             <div
-              class="w-20 h-20 mx-auto bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition"
+              class="w-20 h-20 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition shadow-lg text-gray-700 dark:text-white"
             >
               J
             </div>
-            <h3 class="font-bold text-white">Jojo</h3>
-            <p class="text-xs text-brand-accent mb-2">MARKETING</p>
-            <p class="text-[10px] text-gray-400">Customer Relations</p>
+            <h3 class="font-bold text-gray-900 dark:text-white text-lg">
+              Jojo
+            </h3>
+            <p class="text-xs text-brand-accent mb-2 uppercase">Marketing</p>
+            <p class="text-[10px] text-gray-600 dark:text-gray-300">
+              Customer Relations
+            </p>
           </div>
 
           <!-- Hizkia -->
           <div
-            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group bg-white/50 dark:bg-white/5"
           >
             <div
-              class="w-20 h-20 mx-auto bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition"
+              class="w-20 h-20 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition shadow-lg text-gray-700 dark:text-white"
             >
               H
             </div>
-            <h3 class="font-bold text-white">Hizkia</h3>
-            <p class="text-xs text-brand-accent mb-2">HEAD CHEF</p>
-            <p class="text-[10px] text-gray-400">Food Quality</p>
+            <h3 class="font-bold text-gray-900 dark:text-white text-lg">
+              Hizkia
+            </h3>
+            <p class="text-xs text-brand-accent mb-2 uppercase">Head Chef</p>
+            <p class="text-[10px] text-gray-600 dark:text-gray-300">
+              Food Quality
+            </p>
           </div>
 
           <!-- Ferdinand -->
           <div
-            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group bg-white/50 dark:bg-white/5"
           >
             <div
-              class="w-20 h-20 mx-auto bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition"
+              class="w-20 h-20 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition shadow-lg text-gray-700 dark:text-white"
             >
               F
             </div>
-            <h3 class="font-bold text-white">Ferdinand</h3>
-            <p class="text-xs text-brand-accent mb-2">PRODUCTION</p>
-            <p class="text-[10px] text-gray-400">Efficiency & Assembly</p>
+            <h3 class="font-bold text-gray-900 dark:text-white text-lg">
+              Ferdinand
+            </h3>
+            <p class="text-xs text-brand-accent mb-2 uppercase">Production</p>
+            <p class="text-[10px] text-gray-600 dark:text-gray-300">
+              Efficiency & Assembly
+            </p>
           </div>
 
           <!-- Alvin -->
           <div
-            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group"
+            class="glass-panel p-6 rounded-2xl hover:border-brand-green transition group bg-white/50 dark:bg-white/5"
           >
             <div
-              class="w-20 h-20 mx-auto bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition"
+              class="w-20 h-20 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-2xl font-bold mb-4 group-hover:bg-brand-green group-hover:text-gray-900 transition shadow-lg text-gray-700 dark:text-white"
             >
               A
             </div>
-            <h3 class="font-bold text-white">Alvin</h3>
-            <p class="text-xs text-brand-accent mb-2">LOGISTICS</p>
-            <p class="text-[10px] text-gray-400">Supply Chain</p>
+            <h3 class="font-bold text-gray-900 dark:text-white text-lg">
+              Alvin
+            </h3>
+            <p class="text-xs text-brand-accent mb-2 uppercase">Logistics</p>
+            <p class="text-[10px] text-gray-600 dark:text-gray-300">
+              Supply Chain
+            </p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 11: FINANCIAL -->
+    <!-- SLIDE 11: FINANCIAL (WITH EXPLANATION) -->
     <div class="slide flex-col justify-center px-8 md:px-24">
       <div class="max-w-7xl w-full mx-auto">
         <h2
-          class="text-brand-accent text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
+          class="text-brand-green text-sm font-bold tracking-[0.2em] uppercase mb-8 fade-up"
         >
           10. Financial Feasibility
         </h2>
@@ -955,53 +1193,177 @@
         <div class="grid md:grid-cols-3 gap-8 mb-12 fade-up delay-100">
           <!-- Metric 1 -->
           <div
-            class="bg-gray-800 border-t-4 border-blue-500 p-8 rounded-xl text-center"
+            class="bg-white dark:bg-gray-800 border-t-4 border-blue-500 p-8 rounded-xl text-center transform hover:scale-105 transition duration-300 shadow-md"
           >
-            <p class="text-gray-400 text-sm uppercase tracking-widest mb-2">
+            <p
+              class="text-gray-500 dark:text-gray-400 text-sm uppercase tracking-widest mb-2 font-bold"
+            >
               Startup Cost
             </p>
-            <h3 class="text-4xl font-black text-white">Rp 29.7 Jt</h3>
-            <p class="text-xs text-gray-500 mt-2">Low Barrier to Entry</p>
+            <h3 class="text-4xl font-black text-gray-900 dark:text-white">
+              Rp 29.7 Jt
+            </h3>
+            <p
+              class="text-xs text-gray-600 dark:text-gray-400 mt-2 bg-blue-500/10 py-1 px-2 rounded inline-block text-blue-600 dark:text-blue-400"
+            >
+              Low Barrier to Entry
+            </p>
+            <p
+              class="text-xs text-gray-600 dark:text-gray-400 mt-4 leading-relaxed border-t border-gray-200 dark:border-gray-700 pt-2"
+            >
+              Includes renovation, kitchen equipment, and initial stock. Low
+              risk for high potential.
+            </p>
           </div>
           <!-- Metric 2 -->
           <div
-            class="bg-gray-800 border-t-4 border-yellow-500 p-8 rounded-xl text-center"
+            class="bg-white dark:bg-gray-800 border-t-4 border-yellow-500 p-8 rounded-xl text-center transform hover:scale-105 transition duration-300 shadow-md"
           >
-            <p class="text-gray-400 text-sm uppercase tracking-widest mb-2">
+            <p
+              class="text-gray-500 dark:text-gray-400 text-sm uppercase tracking-widest mb-2 font-bold"
+            >
               Profit Margin
             </p>
-            <h3 class="text-4xl font-black text-white">41.8%</h3>
-            <p class="text-xs text-gray-500 mt-2">On 'Geprek Knockout'</p>
+            <h3 class="text-4xl font-black text-gray-900 dark:text-white">
+              41.8%
+            </h3>
+            <p
+              class="text-xs text-gray-600 dark:text-gray-400 mt-2 bg-yellow-500/10 py-1 px-2 rounded inline-block text-yellow-600 dark:text-yellow-400"
+            >
+              On 'Geprek Knockout'
+            </p>
+            <p
+              class="text-xs text-gray-600 dark:text-gray-400 mt-4 leading-relaxed border-t border-gray-200 dark:border-gray-700 pt-2"
+            >
+              Driven by efficient chicken protein cost (1 breast = 3 portions),
+              maximizing net profit.
+            </p>
           </div>
           <!-- Metric 3 -->
           <div
-            class="bg-gray-800 border-t-4 border-green-500 p-8 rounded-xl text-center shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+            class="bg-white dark:bg-gray-800 border-t-4 border-green-500 p-8 rounded-xl text-center shadow-lg transform hover:scale-105 transition duration-300"
           >
-            <p class="text-gray-400 text-sm uppercase tracking-widest mb-2">
+            <p
+              class="text-gray-500 dark:text-gray-400 text-sm uppercase tracking-widest mb-2 font-bold"
+            >
               ROI (Year 1)
             </p>
             <h3 class="text-4xl font-black text-brand-green">150%</h3>
-            <p class="text-xs text-gray-500 mt-2">Payback: 9.5 Months</p>
+            <p
+              class="text-xs text-gray-600 dark:text-gray-400 mt-2 bg-green-500/10 py-1 px-2 rounded inline-block text-brand-green"
+            >
+              Payback: 9.5 Months
+            </p>
+            <p
+              class="text-xs text-gray-600 dark:text-gray-400 mt-4 leading-relaxed border-t border-gray-200 dark:border-gray-700 pt-2"
+            >
+              Fast capital turnover. Full investment returns in less than 10
+              months.
+            </p>
           </div>
         </div>
 
-        <div class="glass-panel p-8 rounded-2xl text-center fade-up delay-200">
-          <h4 class="text-2xl font-bold mb-4">The Verdict</h4>
-          <p class="text-xl text-gray-300 italic mb-6">
-            "StackUp is not just a sandwich shop. It is a validated, profitable,
-            and scalable business model ready for the Jakarta market."
-          </p>
-          <button
-            class="px-8 py-3 bg-brand-green text-gray-900 font-bold rounded-full hover:bg-brand-accent transition shadow-lg hover:shadow-brand-green/50"
+        <div
+          class="glass-panel p-8 rounded-2xl text-center fade-up delay-200 border border-gray-200 dark:border-white/10"
+        >
+          <h4 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+            The Verdict
+          </h4>
+          <p
+            class="text-xl text-gray-600 dark:text-gray-200 italic mb-8 max-w-3xl mx-auto leading-relaxed"
           >
-            Invest in Us
-          </button>
+            "StackUp is not just a sandwich shop. It is a
+            <b class="text-brand-green">validated, profitable, and scalable</b>
+            business model ready for the Jakarta market."
+          </p>
+          <div
+            class="inline-block px-8 py-4 bg-brand-green text-gray-900 font-black rounded-full shadow-[0_0_20px_rgba(16,185,129,0.5)] tracking-wide"
+          >
+            READY FOR EXECUTION
+          </div>
         </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: THANK YOU (UPDATED) -->
+    <div class="slide flex-col justify-center items-center text-center px-8">
+      <h1
+        class="text-6xl md:text-8xl font-black mb-6 text-gray-900 dark:text-white tracking-tighter fade-up"
+      >
+        Thank <span class="text-brand-green">You</span>
+      </h1>
+      <p
+        class="text-2xl text-gray-600 dark:text-gray-300 mb-12 fade-up delay-100"
+      >
+        Let's Stack Up Success Together.
+      </p>
+
+      <div
+        class="glass-panel p-8 rounded-2xl fade-up delay-200 inline-block border border-brand-green/30 shadow-lg"
+      >
+        <p
+          class="text-brand-green font-bold mb-4 tracking-widest text-sm uppercase"
+        >
+          Follow Us
+        </p>
+        <p
+          class="text-gray-900 dark:text-white text-3xl mb-2 flex items-center justify-center gap-3 font-bold"
+        >
+          <i class="fab fa-instagram text-brand-green"></i> @stackup_idn
+        </p>
       </div>
     </div>
 
     <!-- SCRIPTS -->
     <script>
+      // --- THEME TOGGLE LOGIC ---
+      function toggleTheme() {
+        const html = document.documentElement;
+        const icon = document.getElementById("themeIcon");
+
+        if (html.classList.contains("dark")) {
+          html.classList.remove("dark");
+          icon.classList.remove("fa-sun");
+          icon.classList.add("fa-moon");
+          icon.parentElement.classList.remove("text-yellow-400");
+          icon.parentElement.classList.add("text-gray-800");
+        } else {
+          html.classList.add("dark");
+          icon.classList.remove("fa-moon");
+          icon.classList.add("fa-sun");
+          icon.parentElement.classList.remove("text-gray-800");
+          icon.parentElement.classList.add("text-yellow-400");
+        }
+        updateChartsTheme();
+      }
+
+      function updateChartsTheme() {
+        const isDark = document.documentElement.classList.contains("dark");
+        const textColor = isDark ? "#e5e7eb" : "#374151"; // gray-200 vs gray-700
+        const gridColor = isDark ? "#4b5563" : "#d1d5db"; // gray-600 vs gray-300
+
+        // Update Global Defaults
+        Chart.defaults.color = textColor;
+        Chart.defaults.borderColor = gridColor;
+
+        // Re-render all charts
+        Chart.helpers.each(Chart.instances, (chart) => {
+          // Update specific chart options if needed
+          if (chart.options.scales.x) {
+            chart.options.scales.x.ticks.color = textColor;
+            chart.options.scales.x.grid.color = gridColor;
+          }
+          if (chart.options.scales.y) {
+            chart.options.scales.y.ticks.color = textColor;
+            chart.options.scales.y.grid.color = gridColor;
+          }
+          if (chart.options.plugins.legend) {
+            chart.options.plugins.legend.labels.color = textColor;
+          }
+          chart.update();
+        });
+      }
+
       // --- SLIDE LOGIC ---
       let currentSlide = 0;
       const slides = document.querySelectorAll(".slide");
@@ -1059,14 +1421,13 @@
       });
 
       // --- CHART.JS CONFIGURATION ---
-      // Set global defaults for dark mode look
-      Chart.defaults.color = "#9ca3af";
-      Chart.defaults.borderColor = "#374151";
+      // Set initial defaults
       Chart.defaults.font.family = "Inter";
 
       // Render Charts when page loads
       document.addEventListener("DOMContentLoaded", () => {
         updateUI();
+        updateChartsTheme(); // Apply initial theme to charts
 
         // 1. Problem Chart
         const ctxProblem = document.getElementById("chartProblem");
